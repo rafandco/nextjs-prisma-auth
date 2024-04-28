@@ -11,8 +11,24 @@ function RegisterPage() {
   } = useForm()
 
   // Función que se ejecuta al enviar el formulario
-  const onSubmit = handleSubmit((data) => {
-    console.log(data) // Imprime los datos del formulario en la consola
+  const onSubmit = handleSubmit(async (data) => {
+    if (data.password !== data.confirmPassword) {
+      return alert("Passwords do not match")
+    }
+
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      body: JSON.stringify({
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    const resJSON = await res.json()
+    console.log(resJSON)
   })
 
   return (
