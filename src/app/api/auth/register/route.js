@@ -10,9 +10,9 @@ export async function POST(request) {
            email: data.email,
        }
     })
-        const userFound = db.user.findUnique({
+    const userFound = db.user.findUnique({
         where: {
-           uusername: data.username,
+           username: data.username,
        }
     })
     
@@ -23,7 +23,7 @@ export async function POST(request) {
             status: 400
         })
     }
-    
+
     if (userFound) {
         return NextResponse.json({
             message: "User already exists"
