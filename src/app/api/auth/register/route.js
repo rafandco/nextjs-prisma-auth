@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server" 
 import db from "@/app/libs/db"
+import bcrypt from "bcrypt" 
 
 export async function POST(request) { 
-    const data = await request.json()
-
-    console.log(data)
+    try {
+            const data = await request.json()
 
     const emailFound = await db.user.findUnique({
         where: {
@@ -34,7 +34,23 @@ export async function POST(request) {
         })
     }
 
-    const newUser = await db.user.create({data})
+    const hashedPassword = await bcrypt.hash(data.password, 10)
+    const newUser = await db.user.create({data: {
+            email: data.email,
+            username: data.username,
+            password: hashedPassword
+    }}    
+    )
+    
+    const {password:_, ...user} = newUser
 
-    return NextResponse.json(newUser)
+    return NextResponse.json(user)
+    } catch (error) {
+        return NextResponse.json({
+            message: error.message,
+        },
+            {
+            status: 500,
+        })
+    }
 }
