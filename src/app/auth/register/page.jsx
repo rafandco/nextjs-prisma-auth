@@ -1,6 +1,7 @@
 "use client" // Indica que este componente es para el cliente
 
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/navigation"
 
 function RegisterPage() {
   // Inicializa el hook useForm de react-hook-form para gestionar el formulario
@@ -9,6 +10,8 @@ function RegisterPage() {
     handleSubmit, // Función para manejar el envío del formulario
     formState: { errors }, // Objeto que contiene los errores de validación del formulario
   } = useForm()
+
+  const router = useRouter()
 
   // Función que se ejecuta al enviar el formulario
   const onSubmit = handleSubmit(async (data) => {
@@ -28,7 +31,10 @@ function RegisterPage() {
       },
     })
     const resJSON = await res.json()
-    console.log(resJSON)
+
+    if (res.ok) {
+      router.push("/auth/login")
+    }
   })
 
   return (
