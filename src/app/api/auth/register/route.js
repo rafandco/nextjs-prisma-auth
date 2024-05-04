@@ -5,14 +5,10 @@ export async function POST(request) {
     const data = await request.json()
 
     console.log(data)
-    const emailFound = db.user.findUnique({
+
+    const emailFound = await db.user.findUnique({
         where: {
            email: data.email,
-       }
-    })
-    const userFound = db.user.findUnique({
-        where: {
-           username: data.username,
        }
     })
     
@@ -23,6 +19,12 @@ export async function POST(request) {
             status: 400
         })
     }
+
+    const userFound = await db.user.findUnique({
+        where: {
+            username: data.username,
+        }
+    })
 
     if (userFound) {
         return NextResponse.json({
