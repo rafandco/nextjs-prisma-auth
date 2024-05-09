@@ -10,22 +10,24 @@ function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm()
-
   const router = useRouter()
   const [error, setError] = useState(null)
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log(data)
+
     const res = await signIn("credentials", {
       email: data.email,
       password: data.password,
       redirect: false,
     })
+
     console.log(res)
     if (res.error) {
       setError(res.error)
     } else {
-      setError(null)
       router.push("/dashboard")
+      router.refresh()
     }
   })
 
@@ -33,48 +35,54 @@ function LoginPage() {
     <div className="h-[calc(100vh-7rem)] flex justify-center items-center">
       <form onSubmit={onSubmit} className="w-1/4">
         {error && (
-          <p className="bg-red-500 text-lg text-white p-3 rounded">{error}</p>
+          <p className="bg-red-500 text-lg text-white p-3 rounded mb-2">
+            {error}
+          </p>
         )}
 
         <h1 className="text-slate-200 font-bold text-4xl mb-4">Login</h1>
-        {/* Campo de entrada para el nombre de usuario */}
+
         <label htmlFor="email" className="text-slate-500 mb-2 block text-sm">
-          Email
+          Email:
         </label>
         <input
           type="email"
           {...register("email", {
-            required: { value: true, message: "Email required" }, // Regla de validación: campo requerido
+            required: {
+              value: true,
+              message: "Email is required",
+            },
           })}
           className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
-          placeholder="email@domain.com"
+          placeholder="user@email.com"
         />
 
-        {/* Mensaje de error si hay un error en el campo de email */}
         {errors.email && (
           <span className="text-red-500 text-xs">{errors.email.message}</span>
         )}
 
         <label htmlFor="password" className="text-slate-500 mb-2 block text-sm">
-          Password
+          Password:
         </label>
         <input
           type="password"
           {...register("password", {
-            required: { value: true, message: "Password required" }, // Regla de validación: campo requerido
+            required: {
+              value: true,
+              message: "Password is required",
+            },
           })}
           className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
           placeholder="******"
         />
 
-        {/* Mensaje de error si hay un error en el campo de password */}
         {errors.password && (
           <span className="text-red-500 text-xs">
             {errors.password.message}
           </span>
         )}
 
-        <button className="bg-blue-500 text-white p-3 rounded-lg w-full mt-2">
+        <button className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">
           Login
         </button>
       </form>
