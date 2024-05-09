@@ -40,7 +40,7 @@ function RegisterPage() {
   return (
     // Contenedor principal del formulario
     <div className="h-[calc(100vh-7rem)] flex justify-center items-center">
-      <form action="" onSubmit={onSubmit}>
+      <form action="" onSubmit={onSubmit} className="w-1/4">
         {" "}
         {/* Formulario que llama a la función onSubmit al ser enviado */}
         {/* Título del formulario */}
